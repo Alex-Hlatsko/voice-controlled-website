@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening Result</title>
+</head>
+<body>
+    <h1>Результат распознавания</h1>
+    <div id="result">
+        <!-- Результат будет отображен здесь с использованием JavaScript -->
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const resultElement = document.getElementById("result");
+    
+            // JavaScript-код для отображения результата
+            fetch('/listen_now', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    resultElement.textContent = data.result;
+                } else if (data.error) {
+                    resultElement.textContent = data.error;
+                }
+            })
+            .catch(error => {
+                console.error("Ошибка при получении результата: " + error);
+            });
+        });
+    </script>
+    
+</body>
+</html>

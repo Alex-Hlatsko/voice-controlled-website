@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listening</title>
+</head>
+<body>
+    <p>Слушаем вас...</p>
+    <pre id="result"></pre>
+    <script>
+        function startListening() {
+            const resultElement = document.getElementById("result");
+    
+            const commands = ["перейти на главную страницу", "вернуться", "ещё", "выход"];
+    
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function (stream) {
+                    const recognition = new webkitSpeechRecognition();
+                    recognition.lang = 'ru-RU';
+                    recognition.interimResults = true; // Показывать промежуточные результаты
+    
+                    recognition.onresult = function (event) {
+                        const lastCommand = event.results[event.results.length - 1][0].transcript.toLowerCase();
+    
+                        if (commands.includes(lastCommand)) {
+                            resultElement.textContent = `Вы сказали: ${lastCommand}\n`;
+                        }
+                    }
+    
+                    recognition.onend = function () {
+                        recognition.start();
+                    }
+    
+                    recognition.start();
+                })
+                .catch(function (error) {
+                    console.error("Ошибка при запросе доступа к микрофону: " + error);
+                });
+        }
+    
+        startListening();
+    </script>
+</body>
+</html>
