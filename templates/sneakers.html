@@ -1,21 +1,13 @@
-<!-- index.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Document</title>
 </head>
 <body>
-    <h1>Home</h1>
-    <p>Available voice commands:</p>
-    <ul>
-        {% for command in commands %}
-            <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
-        {% endfor %}
-    </ul>
-
+    <h1>Sneakers</h1>
     <script>
         function sendCommand(command) {
             fetch(`/process_command/${command}`)

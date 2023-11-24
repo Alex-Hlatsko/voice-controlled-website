@@ -1,43 +1,37 @@
+# app.py
+
 from flask import Flask, render_template, jsonify
-import time
 import speech_recognition as sr
 
 app = Flask(__name__)
 
 recognizer = sr.Recognizer()
 
-voice_commands = ["открой сайт", "покажи информацию", "привет"]
+# Dictionary to map command names to URLs
+voice_commands = {"home": "/", "sneakers": "/sneakers", "about us": "/about", "contact": "/contact"}
 
 @app.route('/')
 def index():
-    return render_template('index.html', commands=voice_commands)
+    return render_template('index.html', commands=list(voice_commands.keys()))
 
-@app.route('/listen')
-def listen():
-    return render_template('listen.html')
+@app.route('/sneakers')
+def sneakers():
+    return render_template('sneakers.html', commands=list(voice_commands.keys()))
 
-@app.route('/listen_now', methods=['GET', 'POST'])
-def listen_now():
-    timer = 10
-    audio = None
-    with sr.Microphone() as source:
-        print("Скажите что-нибудь...")
-        for i in range(timer):
-            audio = recognizer.listen(source, timeout=1)
-            if audio:
-                break
+@app.route('/about')
+def about():
+    return render_template('about.html', commands=list(voice_commands.keys()))
 
-    if audio:
-        try:
-            command = recognizer.recognize_google(audio, language="ru-RU")
-            print(f"Вы сказали: {command}")
-            return jsonify({"result": f"Вы сказали: {command}"})
-        except sr.UnknownValueError:
-            return jsonify({"error": "Речь не распознана"})
-        except sr.RequestError as e:
-            return jsonify({"error": f"Ошибка при запросе к сервису распознавания: {e}"})
+@app.route('/contact')
+def contact():
+    return render_template('contact.html', commands=list(voice_commands.keys()))
+
+@app.route('/process_command/<command>')
+def process_command(command):
+    if command in voice_commands:
+        return jsonify({"result": f"You said: {command}", "redirect": voice_commands[command]})
     else:
-        return jsonify({"error": "Тайм-аут распознавания"})
+        return jsonify({"error": "Unknown command"})
 
 if __name__ == '__main__':
     app.run(debug=True)
