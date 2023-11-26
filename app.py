@@ -1,5 +1,3 @@
-# app.py
-
 from flask import Flask, render_template, jsonify
 import speech_recognition as sr
 
@@ -7,8 +5,7 @@ app = Flask(__name__)
 
 recognizer = sr.Recognizer()
 
-# Dictionary to map command names to URLs
-voice_commands = {"home": "/", "sneakers": "/sneakers", "about us": "/about", "contact": "/contact"}
+from commands import voice_commands;
 
 @app.route('/')
 def index():
