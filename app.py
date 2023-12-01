@@ -39,6 +39,24 @@ def sneakers():
         return render_template('sneakers.html', sneakers_data=sneakers_data, commands=list(voice_commands.keys()))
     else:
         return jsonify({"error": "Error"})
+        
+@app.route('/process_string_command/<string_command>')
+def process_string_command(string_command):
+    # Проверяем, состоит ли строка только из цифр
+    if string_command.isdigit():
+        # Преобразуем строку в число и затем в строку
+        numeric_command = str(int(string_command))
+        sneakers_data = parse_data()
+
+        # Ищем товар с указанным ID в спарсенных данных
+        sneaker = next((item for item in sneakers_data if str(item["id"]) == numeric_command), None)
+
+        if sneaker:
+            return jsonify({"result": f"Found product with ID: {numeric_command}", "redirect": f"/sneakers/{numeric_command}"})
+        else:
+            return jsonify({"error": "Product not found"})
+    else:
+        return jsonify({"error": "Invalid command formatее"})
     
 @app.route('/sneakers/<sneaker_id>')
 def sneaker_detail(sneaker_id):

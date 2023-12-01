@@ -1,16 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        img{
+        img {
             width: 100px;
         }
     </style>
 </head>
+
 <body>
     <h1>Sneakers</h1>
 
@@ -18,17 +19,17 @@
     <p>Available voice commands:</p>
     <ul>
         {% for command in commands %}
-            <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
+        <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
         {% endfor %}
     </ul>
 
     <div>
         {% for sneaker in sneakers_data %}
-            <div>
-                <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}">
-                <p>ID: {{ sneaker.id }}</p>
-                <p>Title: {{ sneaker.title }}</p>
-            </div>
+        <div>
+            <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}">
+            <p>ID: {{ sneaker.id }}</p>
+            <p>Title: {{ sneaker.title }}</p>
+        </div>
         {% endfor %}
     </div>
 
@@ -47,41 +48,61 @@
                     console.error('Error:', error);
                 });
         }
-    
-        function startListening() {
-            const commands = {{ commands | tojson | safe }};
-            const triggerWords = commands.map(command => command.toLowerCase());
-    
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function (stream) {
-                    const recognition = new webkitSpeechRecognition();
-                    recognition.lang = 'en-US';
-                    recognition.interimResults = true;
-    
-                    recognition.onresult = function (event) {
-                        const lastCommand = event.results[event.results.length - 1][0].transcript.toLowerCase();
-                        console.log('Spoken phrase:', lastCommand);
-    
-                        // Check if any trigger word is present in the spoken phrase
-                        const foundCommand = triggerWords.find(command => lastCommand.includes(command));
-    
-                        if (foundCommand) {
-                            sendCommand(foundCommand);
-                        }
+
+        function sendStringCommand(stringCommand) {
+            fetch(`/process_string_command/${stringCommand}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        console.error(data.error);
                     }
-    
-                    recognition.onend = function () {
-                        recognition.start();
-                    }
-    
-                    recognition.start();
                 })
-                .catch(function (error) {
-                    console.error("Error accessing the microphone: " + error);
+                .catch(error => {
+                    console.error('Error:', error);
                 });
         }
-    
+
+        function startListening() {
+            const commands = {{ commands | tojson | safe
+        }};
+        const triggerWords = commands.map(command => command.toLowerCase());
+
+        navigator.mediaDevices.getUserMedia({ audio: true })
+            .then(function (stream) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.interimResults = true;
+
+                recognition.onresult = function (event) {
+                    const lastCommand = event.results[event.results.length - 1][0].transcript.toLowerCase();
+                    console.log('Spoken phrase:', lastCommand);
+
+                    // Check if any trigger word is present in the spoken phrase
+                    const foundCommand = triggerWords.find(command => lastCommand.includes(command));
+
+                    if (foundCommand) {
+                        sendCommand(foundCommand);
+                    } else {
+                        // Если не найдена голосовая команда, отправляем как строковую
+                        sendStringCommand(lastCommand);
+                    }
+                }
+
+                recognition.onend = function () {
+                    recognition.start();
+                }
+
+                recognition.start();
+            })
+            .catch(function (error) {
+                console.error("Error accessing the microphone: " + error);
+            });
+        }
+
         startListening();
     </script>
 </body>
+
 </html>
