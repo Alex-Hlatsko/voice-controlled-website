@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify
 import speech_recognition as sr
+import requests
 
 app = Flask(__name__)
 
@@ -7,13 +8,48 @@ recognizer = sr.Recognizer()
 
 from commands import voice_commands;
 
+def parse_data():
+    url = 'https://voice-web-a2514-default-rtdb.europe-west1.firebasedatabase.app/sneakers.json'
+    
+    try:
+        response = requests.get(url)
+
+        if response.status_code == 200:
+            data = response.json()
+            if isinstance(data, list):
+                sneakers_data = [item for item in data if isinstance(item, dict) and item.get("id")]
+                return sneakers_data
+            else:
+                raise ValueError("Invalid data format received from the server")
+        else:
+            raise requests.RequestException(f"Failed to fetch data from the server. Status code: {response.status_code}")
+    except (ValueError, requests.RequestException) as e:
+        print(f"Error: {e}")
+        return None
+
+    
 @app.route('/')
 def index():
     return render_template('index.html', commands=list(voice_commands.keys()))
 
 @app.route('/sneakers')
 def sneakers():
-    return render_template('sneakers.html', commands=list(voice_commands.keys()))
+    sneakers_data = parse_data()
+    if sneakers_data:
+        return render_template('sneakers.html', sneakers_data=sneakers_data, commands=list(voice_commands.keys()))
+    else:
+        return jsonify({"error": "Error"})
+    
+@app.route('/sneakers/<sneaker_id>')
+def sneaker_detail(sneaker_id):
+    sneakers_data = parse_data()
+    
+    sneaker = next((item for item in sneakers_data if str(item["id"]) == sneaker_id), None)
+
+    if sneaker:
+        return render_template('sneaker_detail.html', sneaker=sneaker, commands=list(voice_commands.keys()))
+    else:
+        return render_template('error.html', error_message="Товар не найден")
 
 @app.route('/about')
 def about():

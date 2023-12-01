@@ -5,9 +5,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        img{
+            width: 100px;
+        }
+    </style>
 </head>
 <body>
     <h1>Sneakers</h1>
+
+    <h1>Sneakers</h1>
+    <p>Available voice commands:</p>
+    <ul>
+        {% for command in commands %}
+            <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        {% for sneaker in sneakers_data %}
+            <div>
+                <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}">
+                <p>ID: {{ sneaker.id }}</p>
+                <p>Title: {{ sneaker.title }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
     <script>
         function sendCommand(command) {
             fetch(`/process_command/${command}`)

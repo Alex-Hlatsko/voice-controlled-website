@@ -1,0 +1,46 @@
+<!-- sneaker_detail.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ sneaker.title }}</title>
+    <style>
+        img {
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ sneaker.title }}</h1>
+
+    <p>ID: {{ sneaker.id }}</p>
+    <p>Название: {{ sneaker.title }}</p>
+    <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}">
+
+    <p>Доступные голосовые команды:</p>
+    <ul>
+        {% for command in commands %}
+            <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function sendCommand(command) {
+            fetch(`/process_command/${command}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        console.error(data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                });
+        }
+    </script>
+</body>
+</html>
