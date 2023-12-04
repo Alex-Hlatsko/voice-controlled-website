@@ -1,0 +1,21 @@
+.about{
+    padding-top: 4rem;
+    width: 85%;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.about_img{
+    margin-right: 5rem;
+}
+.about_img img{
+    width: 500px;
+}
+.about_text h1{
+    font-size: 48px;
+    margin-bottom: 2rem;
+}
+.about_text p{
+    line-height: 1.6rem;
+}
