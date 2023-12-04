@@ -1,20 +1,23 @@
-<!-- about.html -->
+<!-- index.html -->
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us</title>
+    <title>Home</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../static/css/style.css">
 
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/home.css">
 </head>
 <body>
+
     <div class="particle" id="particles-js"></div>
+
     <div class="container">
         <nav>
             <div class="logo">
@@ -27,8 +30,15 @@
                 <a href="/contact" class="menu_item">Contact</a>
             </div>
         </nav>
+
+        <div class="home_content">
+            <h1 class="xxl_title">Harness Your <span class="main_color">Voice</span></h1>
+            <p class="xxl_sub_title">This website supports voice control. Simply speak to navigate where you want to go.</p>
+        </div>
     </div>
 
+    <script src="../static/js/particles.js"></script>
+    <script src="../static/js/particl.js"></script>
     <script>
         function sendCommand(command) {
             fetch(`/process_command/${command}`)
@@ -80,7 +90,5 @@
     
         startListening();
     </script>
-    <script src="../static/js/particles.js"></script>
-    <script src="../static/js/particl.js"></script>
 </body>
 </html>

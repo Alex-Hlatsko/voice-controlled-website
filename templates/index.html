@@ -6,66 +6,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/index.css">
 </head>
 <body>
-    <h1>Home</h1>
-    <p>Available voice commands:</p>
-    <ul>
-        {% for command in commands %}
-            <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
-        {% endfor %}
-    </ul>
 
+    <div class="particle" id="particles-js"></div>
+
+    <div class="container index_content">
+        <button class="microphoneButton" id="microphoneButton">Request Microphone Access</button>
+    </div>
+
+    
     <script>
-        function sendCommand(command) {
-            fetch(`/process_command/${command}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.redirect) {
-                        window.location.href = data.redirect;
-                    } else {
-                        console.error(data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-    
-        function startListening() {
-            const commands = {{ commands | tojson | safe }};
-            const triggerWords = commands.map(command => command.toLowerCase());
-    
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function (stream) {
-                    const recognition = new webkitSpeechRecognition();
-                    recognition.lang = 'en-US';
-                    recognition.interimResults = true;
-    
-                    recognition.onresult = function (event) {
-                        const lastCommand = event.results[event.results.length - 1][0].transcript.toLowerCase();
-                        console.log('Spoken phrase:', lastCommand);
-    
-                        // Check if any trigger word is present in the spoken phrase
-                        const foundCommand = triggerWords.find(command => lastCommand.includes(command));
-    
-                        if (foundCommand) {
-                            sendCommand(foundCommand);
-                        }
-                    }
-    
-                    recognition.onend = function () {
-                        recognition.start();
-                    }
-    
-                    recognition.start();
-                })
-                .catch(function (error) {
-                    console.error("Error accessing the microphone: " + error);
-                });
-        }
-    
-        startListening();
+        document.getElementById('microphoneButton').addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                console.log('Microphone access granted!');
+                // Теперь у вас есть доступ к микрофону через объект "stream"
+                // Вы можете использовать этот объект, например, для записи звука или передачи через сеть.
+
+                // После успешного получения доступа, перенаправляем пользователя на /home
+                window.location.href = '/home';
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+            }
+        });
     </script>
+    <script src="../static/js/particles.js"></script>
+    <script src="../static/js/particl.js"></script>
 </body>
 </html>

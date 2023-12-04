@@ -1,0 +1,27 @@
+.sneaker_details{
+    display: flex;
+    justify-content: space-between;
+    /* align-items: center; */
+    width: 70%;
+    margin: auto;
+    margin-top: 2rem;
+}
+.sneaker_details_img img{
+    width: 420px;
+    margin-right: 10rem;
+}
+.sneaker_details_text h1{
+    font-size: 36px;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.sneaker_details_text .desc{
+    margin-bottom: 4rem;
+}
+.sneaker_details_text span{
+    font-size: 24px;
+    font-weight: 600;
+}
+.sneaker_details_text{
+    padding-top: 3rem;
+}

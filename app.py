@@ -29,8 +29,12 @@ def parse_data():
 
     
 @app.route('/')
-def index():
+def home():
     return render_template('index.html', commands=list(voice_commands.keys()))
+
+@app.route('/home')
+def index():
+    return render_template('home.html', commands=list(voice_commands.keys()))
 
 @app.route('/sneakers')
 def sneakers():
@@ -56,7 +60,7 @@ def process_string_command(string_command):
         else:
             return jsonify({"error": "Product not found"})
     else:
-        return jsonify({"error": "Invalid command formatее"})
+        return jsonify({"error": "Invalid command format"})
     
 @app.route('/sneakers/<sneaker_id>')
 def sneaker_detail(sneaker_id):

@@ -5,33 +5,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        img {
-            width: 100px;
-        }
-    </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/sneakers.css">
+
 </head>
 
 <body>
-    <h1>Sneakers</h1>
+    <div class="particle" id="particles-js"></div>
+    <div class="container">
+        <nav>
+            <div class="logo">
+                <h1><span class="main_color">Voice</span> Website</h1>
+            </div>
+            <div class="menu">
+                <a href="/home" class="menu_item">Home</a>
+                <a href="/sneakers" class="menu_item">Sneakers</a>
+                <a href="/about" class="menu_item">About us</a>
+                <a href="/contact" class="menu_item">Contact</a>
+            </div>
+        </nav>
 
-    <h1>Sneakers</h1>
-    <p>Available voice commands:</p>
-    <ul>
-        {% for command in commands %}
-        <li onclick="sendCommand('{{ command }}')">{{ command }}</li>
-        {% endfor %}
-    </ul>
+        <h1 style="text-align: center; font-size: 36px;">Sneakers</h1>
+        <p style="text-align: center; font-size: 18px; color: #cecece;">Tell the ID of the item you're interested in</p>
 
+        <div class="sneakers_content">
+            {% for sneaker in sneakers_data %}
+            <div class="sneakers_item">
+                <img src="{{ sneaker.img }}" alt="img">
+                <div class="sneakers_item_text">
+                    <h1>{{ sneaker.title }}</h1>
+                    <p>ID: {{ sneaker.id }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+
+
+
+    <!-- <h1>Sneakers</h1>
     <div>
         {% for sneaker in sneakers_data %}
-        <div>
-            <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}">
-            <p>ID: {{ sneaker.id }}</p>
-            <p>Title: {{ sneaker.title }}</p>
+        <div class="product-card">
+            <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}" class="product-image">
+            <div class="product-info">
+                <p class="product-id">ID: {{ sneaker.id }}</p>
+                <p>Title: {{ sneaker.title }}</p>
+            </div>
         </div>
         {% endfor %}
-    </div>
+    </div> -->
 
     <script>
         function sendCommand(command) {
@@ -103,6 +133,8 @@
 
         startListening();
     </script>
+    <script src="../static/js/particles.js"></script>
+    <script src="../static/js/particl.js"></script>
 </body>
 
 </html>

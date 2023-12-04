@@ -1,0 +1,23 @@
+.index_content{
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+.microphoneButton {
+    display: inline-block;
+    padding: 50px 80px;
+    border: 2px solid white;
+    border-radius: 50%;
+    text-transform: uppercase;
+    color: white;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 24px;
+    transition: color 0.3s, background-color 0.3s, box-shadow 0.3s;
+}
+
+.microphoneButton:hover {
+    color: black; /* Цвет текста при наведении */
+    background-color: white; /* Цвет фона при наведении */
+    box-shadow: 0 0 80px rgba(255, 255, 255, 0.7); /* Тень при наведении */
+}
