@@ -46,13 +46,13 @@ def sneakers():
         
 @app.route('/process_string_command/<string_command>')
 def process_string_command(string_command):
-    # Проверяем, состоит ли строка только из цифр
+    # check string to number
     if string_command.isdigit():
-        # Преобразуем строку в число и затем в строку
+        # convert string to number
         numeric_command = str(int(string_command))
         sneakers_data = parse_data()
 
-        # Ищем товар с указанным ID в спарсенных данных
+        # find product id
         sneaker = next((item for item in sneakers_data if str(item["id"]) == numeric_command), None)
 
         if sneaker:

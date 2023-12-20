@@ -21,3 +21,10 @@
     background-color: white; /* Цвет фона при наведении */
     box-shadow: 0 0 80px rgba(255, 255, 255, 0.7); /* Тень при наведении */
 }
+
+@media only screen and (max-width: 600px) {
+    .microphoneButton{
+        font-size: 18px;
+        padding: 35px 40px;
+    }
+}

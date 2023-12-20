@@ -11,8 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="../static/css/style.css">
     <link rel="stylesheet" href="../static/css/sneakers.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 
 </head>
 
@@ -28,11 +28,15 @@
                 <a href="/sneakers" class="menu_item">Sneakers</a>
                 <a href="/about" class="menu_item">About us</a>
                 <a href="/contact" class="menu_item">Contact</a>
+                <div class="menu_cross"><img src="../static/img/cross.svg" alt="cross"></div>
+            </div>
+            <div class="burger_menu">
+                <img src="../static/img/burger-menu.svg" alt="burger">
             </div>
         </nav>
 
         <h1 style="text-align: center; font-size: 36px;">Sneakers</h1>
-        <p style="text-align: center; font-size: 18px; color: #cecece;">Tell the ID of the item you're interested in</p>
+        <p style="text-align: center; font-size: 18px; color: #cecece;">Tell the ID of the item you're interested in <br/>For example: one two four four</p>
 
         <div class="sneakers_content">
             {% for sneaker in sneakers_data %}
@@ -47,21 +51,6 @@
         </div>
 
     </div>
-
-
-
-    <!-- <h1>Sneakers</h1>
-    <div>
-        {% for sneaker in sneakers_data %}
-        <div class="product-card">
-            <img src="{{ sneaker.img }}" alt="{{ sneaker.title }}" class="product-image">
-            <div class="product-info">
-                <p class="product-id">ID: {{ sneaker.id }}</p>
-                <p>Title: {{ sneaker.title }}</p>
-            </div>
-        </div>
-        {% endfor %}
-    </div> -->
 
     <script>
         function sendCommand(command) {
@@ -115,7 +104,6 @@
                     if (foundCommand) {
                         sendCommand(foundCommand);
                     } else {
-                        // Если не найдена голосовая команда, отправляем как строковую
                         sendStringCommand(lastCommand);
                     }
                 }

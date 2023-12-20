@@ -1,5 +1,3 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +21,6 @@
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 console.log('Microphone access granted!');
-                // Теперь у вас есть доступ к микрофону через объект "stream"
-                // Вы можете использовать этот объект, например, для записи звука или передачи через сеть.
-
-                // После успешного получения доступа, перенаправляем пользователя на /home
                 window.location.href = '/home';
             } catch (error) {
                 console.error('Error accessing microphone:', error);

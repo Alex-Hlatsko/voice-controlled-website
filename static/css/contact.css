@@ -1,0 +1,19 @@
+.contact{
+    padding-top: 2rem;
+    width: 40%;
+    margin: auto;
+}
+.contact_item{
+    margin-top: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact_item_title h1{
+    font-size: 36px;
+}
+.contact_item_text p{
+    font-size: 18px;
+    margin: 15px 0;
+}
