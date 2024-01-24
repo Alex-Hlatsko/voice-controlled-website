@@ -1,16 +1,25 @@
 from flask import Flask, render_template, jsonify
-import speech_recognition as sr
+from objects.home import Home
+from objects.index import Index
+from objects.sneakers import Sneakers
+from objects.sneaker_detail import SneakerDetail
+from objects.about import About
+from objects.contact import Contact
 import requests
+
 
 app = Flask(__name__)
 
-recognizer = sr.Recognizer()
-
-from commands import voice_commands;
+home_page = Home()
+index_page = Index()
+sneakers_page = Sneakers()
+sneaker_detail_page = SneakerDetail()
+about_page = About()
+contact_page = Contact()
 
 def parse_data():
     url = 'https://voice-web-a2514-default-rtdb.europe-west1.firebasedatabase.app/sneakers.json'
-    
+
     try:
         response = requests.get(url)
 
@@ -27,64 +36,59 @@ def parse_data():
         print(f"Error: {e}")
         return None
 
-    
 @app.route('/')
 def home():
-    return render_template('index.html', commands=list(voice_commands.keys()))
+    return index_page.render()
 
 @app.route('/home')
 def index():
-    return render_template('home.html', commands=list(voice_commands.keys()))
+    return home_page.render()
 
 @app.route('/sneakers')
 def sneakers():
-    sneakers_data = parse_data()
-    if sneakers_data:
-        return render_template('sneakers.html', sneakers_data=sneakers_data, commands=list(voice_commands.keys()))
-    else:
-        return jsonify({"error": "Error"})
-        
-@app.route('/process_string_command/<string_command>')
-def process_string_command(string_command):
-    # check string to number
-    if string_command.isdigit():
-        # convert string to number
-        numeric_command = str(int(string_command))
-        sneakers_data = parse_data()
+    return sneakers_page.render()
 
-        # find product id
-        sneaker = next((item for item in sneakers_data if str(item["id"]) == numeric_command), None)
-
-        if sneaker:
-            return jsonify({"result": f"Found product with ID: {numeric_command}", "redirect": f"/sneakers/{numeric_command}"})
-        else:
-            return jsonify({"error": "Product not found"})
-    else:
-        return jsonify({"error": "Invalid command format"})
-    
 @app.route('/sneakers/<sneaker_id>')
 def sneaker_detail(sneaker_id):
-    sneakers_data = parse_data()
-    
-    sneaker = next((item for item in sneakers_data if str(item["id"]) == sneaker_id), None)
-
-    if sneaker:
-        return render_template('sneaker_detail.html', sneaker=sneaker, commands=list(voice_commands.keys()))
-    else:
-        return render_template('error.html', error_message="Товар не найден")
+    return sneaker_detail_page.render(sneaker_id)
 
 @app.route('/about')
 def about():
-    return render_template('about.html', commands=list(voice_commands.keys()))
+    return about_page.render()
 
 @app.route('/contact')
 def contact():
-    return render_template('contact.html', commands=list(voice_commands.keys()))
+    return contact_page.render()
+
+@app.route('/process_string_command/<string_command>')
+def process_string_command(string_command):
+    try:
+        if string_command.replace(" ", "").isdigit():
+            numeric_command = int(string_command.replace(" ", ""))
+            sneakers_data = parse_data()
+
+            sneaker = next((item for item in sneakers_data if item.get("id") == numeric_command), None)
+
+            if sneaker:
+                return jsonify({"result": f"Found product with ID: {numeric_command}", "redirect": f"/sneakers/{numeric_command}"})
+            else:
+                return jsonify({"error": "Product not found"})
+        else:
+            return jsonify({"error": "Invalid command format"})
+    except Exception as e:
+        return jsonify({"error": str(e)})
 
 @app.route('/process_command/<command>')
 def process_command(command):
-    if command in voice_commands:
-        return jsonify({"result": f"You said: {command}", "redirect": voice_commands[command]})
+    result = None
+    
+    for page in [home_page, index_page, sneakers_page, sneaker_detail_page, about_page, contact_page]:
+        result = page.process_command(command)
+        if "redirect" in result:
+            break
+    
+    if result:
+        return jsonify(result)
     else:
         return jsonify({"error": "Unknown command"})
 

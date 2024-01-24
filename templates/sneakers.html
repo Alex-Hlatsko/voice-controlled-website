@@ -69,19 +69,19 @@
         }
 
         function sendStringCommand(stringCommand) {
-            fetch(`/process_string_command/${stringCommand}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.redirect) {
-                        window.location.href = data.redirect;
-                    } else {
-                        console.error(data.error);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
+        fetch(`/process_string_command/${stringCommand}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.redirect) {
+                    window.location.href = data.redirect;
+                } else {
+                    console.error(data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
         function startListening() {
             const commands = {{ commands | tojson | safe
